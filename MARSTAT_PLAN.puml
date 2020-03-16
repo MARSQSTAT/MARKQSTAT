@@ -1,6 +1,6 @@
 @startuml
 cloud ip_offices
-cloud AWS.s3{
+cloud AWS_s3 {
 folder ipaustralia.marqstat.raw {
 folder au
 folder ca
@@ -22,20 +22,21 @@ folder ipaustralia.marqstat.parquets {
 [us ]
 }
 }
-database TMLINK
 control source
 control conversion
 control transformation
-control linktm
-control build_marqstat
+control tmlink
+control marqstat
+database POSTGRES.MARQSTAT
 
-ip_offices -> source: get_office_data()
+ip_offices -> source: get_office_data(xml,api,csv)
 source -> ipaustralia.marqstat.raw
-s3.ipaustralia.marqstat.raw -> conversion: raw_to_parquet()
-conversion -> ipaustralia.marqstat.parquets: transformation()
-
-TMLINK -> linktm: links_trademarks() return parquet[county,applicant,uid_trademark]
-linktm -> TMLINK: load_links()
+AWS_s3 -> conversion: raw_to_parquet(raw)
+conversion -> ipaustralia.marqstat.parquets
+AWS_s3 -> transformation
+transformation -> POSTGRES.MARQSTAT: build_marqstat(parquets)
+POSTGRES.MARQSTAT -> tmlink: links_trademarks() return parquet[county,applicant,uid_trademark]
+tmlink -> POSTGRES.MARQSTAT: write_link_table()
 
 @enduml
 
