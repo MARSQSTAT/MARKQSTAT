@@ -8,3 +8,7 @@ class Source:
     def get_source(self):
         return 'Sources obtained'
 
+
+class CH_TRADEMARK:
+    def get_ch_source():
+        print('hello')
