@@ -1,31 +1,24 @@
+from sqlalchemy import create_engine
+
 class Linker:
 
-
     def __init__(self):
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
     def write_link_table(self):
         # Main function for running algos and then compiling
 
-        #This function will build a single link table for TMLINK
+        #This function will build a single link table for MARQSTAT
         # It has the COUNTRY, APPLICATION_NUMBER, UID_
+
+
+
 
     def link_by_marq_id(self):
         # THis is Mark James Thompson's personal little linker
+
+        return 1
 
     def link_trademarks_by_uid(self):
         # This is where IP Australia's linking algorithm goes

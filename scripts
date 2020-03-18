@@ -1,0 +1,3 @@
+cd ~/Documents/Consultancy/32_MARQSTAT
+
+docker build -t marqstat
