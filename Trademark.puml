@@ -1,0 +1,199 @@
+@startuml
+start
+if (Madrid route) then (yes)
+  :WIPO;
+else (no)
+  :IPaus;
+  if (received via post) then (true)
+  : received;
+  endif
+endif
+if (pre application) then (true)
+: pre_application_filed;
+note left
+    No idea - something about a headstart
+end note
+else
+endif
+
+
+if (filed) then (true)
+: application birth;
+else (false)
+: "not_filed";
+ end
+endif
+if (applicationToExamine) then (yes)
+
+
+partition Stockpile {
+    if (convert) then (true)
+        : converted;
+        note left
+         Converted to a different type of application
+         - prior to examination usually.
+        end note
+        else (false)
+
+        endif
+    if (voided) then (true);
+        end;
+    else
+    while (examine)
+         if (refused) then (yes)
+            end;
+         endif
+
+          if (rejected) then (yes)
+            end;
+         endif
+         if (withdrawn) then (yes)
+            end;
+         endif
+
+        if (link) then (no)
+        else (yes)
+           : Linked=true;
+        endif
+
+        if (merge) then (no)
+        else (yes)
+            : Merged=true;
+        endif
+    endwhile
+    if (accept) then (true)
+    : accepted;
+    note left
+    Passed exam but not granted.
+    end note
+        end;
+    else (false)
+    : publish;
+    endif
+
+
+
+    partition (public_objection_phase) {
+        if (objection) then (yes)
+            while(objection)
+                if (inter_partes_refused) then (true)
+                end;
+                else (false)
+
+                endif
+
+                if (ex_partes_refused) then (true)
+                 end;
+                else (false)
+
+                endif
+
+            endwhile
+        else (no)
+
+        endif
+    }
+
+
+    endif
+}
+
+
+
+split
+    partition dead {
+    split
+    : Removed;
+    split again
+    : "Not protected";
+    split again
+    : ex_parte_refused;
+    split again
+    : inter_partes_refused;
+    split again
+    : voided;
+    note right
+    No idea
+    end note
+
+    endsplit;
+    end;
+}
+split again
+partition inforce {
+split
+    : protected;
+    split again
+    : certified;
+        note right
+    similar to protected
+    end note
+
+    split again
+    : registered;
+            note right
+    As for protected
+    end note
+
+    end split
+while (renewed)
+
+if (ceased) then (yes)
+   end;
+endif
+if (canceled) then (yes)
+   end;
+endif
+if (revoked) then (yes)
+   end;
+endif
+
+
+
+endwhile
+
+}
+
+
+partition dead {
+    split
+        : Ceased;
+        note right
+        Granted, lived and then died as an in force trademark.
+        end note
+    split again
+        : "Ceased - Not Renewed";
+   split again
+       : removed;
+       note right
+       Granted and then revoked (we think)
+       end note
+    split again
+        : Canceled;
+        note right
+        Granted but then revoked.
+        end note
+    endsplit;
+    end
+}
+
+endsplit
+
+
+
+
+else (no)
+
+
+partition dead {
+   split
+       :withdrawn;
+   split again
+       :lapsed;
+
+
+   endsplit
+    end;
+}
+
+@enduml
